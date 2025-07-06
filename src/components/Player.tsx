@@ -4,7 +4,7 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 
-export function Player({ onCollect }) {
+export function Player() {
   const body = useRef<RapierRigidBody>(null)
   const { rapier, world } = useRapier()
 
@@ -115,7 +115,7 @@ export function Player({ onCollect }) {
       position={[0, 1, 0]}
       onCollisionEnter={({ other }) => {
         if (other.rigidBodyObject.name === "collectible") {
-          onCollect()
+          // Removed onCollect prop
         }
       }}
     >
