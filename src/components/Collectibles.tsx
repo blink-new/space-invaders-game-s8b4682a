@@ -1,11 +1,17 @@
 import { RigidBody, CuboidCollider } from '@react-three/rapier'
 import { useFrame } from '@react-three/fiber'
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, useEffect } from 'react'
 import { Group } from 'three'
 
-function Collectible({ position, onCollect }) {
+function Collectible({ position, onCollect, reset }) {
   const ref = useRef<Group>(null)
   const [collected, setCollected] = useState(false)
+
+  useEffect(() => {
+    if (reset) {
+      setCollected(false)
+    }
+  }, [reset])
 
   useFrame((_, delta) => {
     if (ref.current) {
@@ -38,7 +44,7 @@ function Collectible({ position, onCollect }) {
   )
 }
 
-export function Collectibles({ onCollect }) {
+export function Collectibles({ onCollect, reset }) {
   const collectibles = useMemo(() => [
     { position: [0, 3, -5] },
     { position: [5, 5, -10] },
@@ -48,7 +54,7 @@ export function Collectibles({ onCollect }) {
   return (
     <>
       {collectibles.map((collectible, i) => (
-        <Collectible key={i} position={collectible.position} onCollect={onCollect} />
+        <Collectible key={i} position={collectible.position} onCollect={onCollect} reset={reset} />
       ))}
     </>
   )

@@ -4,11 +4,24 @@ import { Physics } from '@react-three/rapier'
 import { Level } from './components/Level'
 import { Player } from './components/Player'
 import { Collectibles } from './components/Collectibles'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const App = () => {
   const [score, setScore] = useState(0)
+  const [reset, setReset] = useState(false)
   const numCollectibles = 3
+
+  const handleReset = () => {
+    setScore(0)
+    setReset(true)
+  }
+
+  useEffect(() => {
+    if (reset) {
+      setScore(0)
+      setReset(false)
+    }
+  }, [reset])
 
   return (
     <>
@@ -28,6 +41,9 @@ const App = () => {
           }}
         >
           You Win!
+          <button onClick={handleReset} style={{ fontSize: '1rem', display: 'block', margin: '1rem auto' }}>
+            Play Again
+          </button>
         </div>
       )}
       <KeyboardControls
@@ -46,8 +62,8 @@ const App = () => {
           <pointLight castShadow intensity={1.5} position={[100, 100, 100]} />
           <Physics gravity={[0, -30, 0]}>
             <Level />
-            <Player />
-            <Collectibles onCollect={() => setScore((s) => s + 1)} />
+            <Player reset={reset} />
+            <Collectibles onCollect={() => setScore((s) => s + 1)} reset={reset} />
           </Physics>
         </Canvas>
       </KeyboardControls>

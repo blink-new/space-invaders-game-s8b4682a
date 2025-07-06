@@ -4,7 +4,7 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 
-export function Player() {
+export function Player({ reset }) {
   const body = useRef<RapierRigidBody>(null)
   const { rapier, world } = useRapier()
 
@@ -103,6 +103,12 @@ export function Player() {
     state.camera.position.copy(cameraPosition)
     state.camera.lookAt(cameraTarget)
   })
+
+  useEffect(() => {
+    if (reset) {
+      doReset()
+    }
+  }, [reset])
 
   return (
     <RigidBody
